@@ -68,7 +68,7 @@ for(m in 1:length(buffer_size)){
                   group_by(study_ID) %>% 
                   filter(row_number() == 1))
   m_urban_summary <- summary(m_urban)
-
+  
   # meta-model
   model1 <- rma.mv(yi = lnCVR, 
                    V = lnCVR.sv, 
@@ -90,7 +90,7 @@ for(m in 1:length(buffer_size)){
   file_name <- paste0("LC_model_Buffer", buffer_size[m], ".RDS")
   saveRDS(model1, file = paste0("./models/land_cover_models/", file_name))
   model1_est <- estimates.CI(model1)
-
+  
   # save model results
   df00[[m]] <- model1_est
   
@@ -112,7 +112,7 @@ df <- rbindlist(df00)
 
 ## save results
 #saveRDS(object = df, 
- #       file = "./models/land_cover_models/LC_model_summary_lnCVR.RDS")
+#       file = "./models/land_cover_models/LC_model_summary_lnCVR.RDS")
 
 
 ##
