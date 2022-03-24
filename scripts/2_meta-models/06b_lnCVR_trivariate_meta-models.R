@@ -139,6 +139,7 @@ model1 <- rma.mv(yi = lnCVR,
 ##
 ## top model, as shown in Table S4 (see below)
 summary(model1)
+r2_ml(model1)
 model1_est <- estimates.CI(model1)
 
 # save results model 1
