@@ -6,7 +6,7 @@
 #' Capilla-Lasheras et al. 
 #' Preprint: https://doi.org/10.1101/2021.09.24.461498
 #' 
-#' Latest update: 2022/03/19
+#' Latest update: 2022/06/17
 #' 
 ###
 ###
@@ -78,7 +78,7 @@ df00 <- data.frame(model_ID = rep(NA,n_models),
 
 ##
 ##
-##### Model 0 - Univariate model not accounting for heterogeneous variances #####
+##### Model 4.0 - Univariate model not accounting for heterogeneous variances #####
 ##
 ##
 model0 <- rma.mv(yi = lnCVR, 
@@ -93,13 +93,13 @@ model0 <- rma.mv(yi = lnCVR,
                  struct=c("DIAG"),  
                  data=df_lnCVR, 
                  method="ML")
-#saveRDS(object = model0, "./models/Table_S4/lnCVR_model0.RDS")
-#model0 <- readRDS("./models/Table_S4/lnCVR_model0.RDS")
+#saveRDS(object = model0, "./models/Table_S4/MODEL4.0_lnCVR.RDS")
+#model0 <- readRDS("./models/Table_S4/MODEL4.0_lnCVR.RDS")
 
 summary(model0)
 model0_est <- estimates.CI(model0)
 
-# save results model 0
+# save results model 4.0
 df00$model_ID[1] <- "NONE"
 df00$model_ID_n[1] <- 0
 df00$study_id_str[1] <- "NONE"
@@ -118,7 +118,7 @@ df00$coef_FN_high[1] <- model0_est$upper[model0_est$estimate == "trait# Fledglin
 
 ##
 ##
-##### Model 1 - Initial trivariate model DIAG #####
+##### Model 4.1 - Initial trivariate model DIAG #####
 ##
 ##
 model1 <- rma.mv(yi = lnCVR, 
@@ -133,12 +133,12 @@ model1 <- rma.mv(yi = lnCVR,
                  struct=c("DIAG", "DIAG"), 
                  data=df_lnCVR, 
                  method="ML")
-#saveRDS(object = model1, "./models/Table_S4/lnCVR_model1.RDS")
-#model1 <- readRDS("./models/Table_S4/lnCVR_model1.RDS")
+#saveRDS(object = model1, "./models/Table_S4/MODEL4.1_lnCVR.RDS")
+#model1 <- readRDS("./models/Table_S4/MODEL4.1_lnCVR.RDS")
 
 ##
 ## top model, as shown in Table S4 (see below)
-summary(model1)
+summary(model1) # MODEL 4 in main text
 r2_ml(model1)
 model1_est <- estimates.CI(model1)
 
@@ -161,7 +161,7 @@ df00$coef_FN_high[2] <- model1_est$upper[model1_est$estimate == "trait# Fledglin
 
 ##
 ##
-##### Model 2 - Trivariate model CS #####
+##### Model 4.2 - Trivariate model CS #####
 ##
 ##
 model2 <- rma.mv(yi = lnCVR, 
@@ -176,13 +176,13 @@ model2 <- rma.mv(yi = lnCVR,
                  struct=c("CS", "DIAG"), 
                  data=df_lnCVR, 
                  method="ML")
-#saveRDS(object = model2, "./models/Table_S4/lnCVR_model2.RDS")
-#model2 <- readRDS("./models/Table_S4/lnCVR_model2.RDS")
+#saveRDS(object = model2, "./models/Table_S4/MODEL4.2_lnCVR.RDS")
+#model2 <- readRDS("./models/Table_S4/MODEL4.2_lnCVR.RDS")
 
 summary(model2)
 model2_est <- estimates.CI(model2)
 
-# save results model 2
+# save results model 4.2
 m_row <- 3
 df00$model_ID[m_row] <- "CS"
 df00$model_ID_n[m_row] <- m_row-1
@@ -202,7 +202,7 @@ df00$coef_FN_high[m_row] <- model2_est$upper[model2_est$estimate == "trait# Fled
 
 ##
 ##
-##### Model 3 - Trivariate model HCS #####
+##### Model 4.3 - Trivariate model HCS #####
 ##
 ##
 model3 <- rma.mv(yi = lnCVR, 
@@ -217,13 +217,13 @@ model3 <- rma.mv(yi = lnCVR,
                  struct=c("HCS", "DIAG"), 
                  data=df_lnCVR, 
                  method="ML")
-#saveRDS(object = model3, "./models/Table_S4/lnCVR_model3.RDS")
-#model3 <- readRDS("./models/Table_S4/lnCVR_model3.RDS")
+#saveRDS(object = model3, "./models/Table_S4/MODEL4.3_lnCVR.RDS")
+#model3 <- readRDS("./models/Table_S4/MODEL4.3_lnCVR.RDS")
 
 summary(model3)
 model3_est <- estimates.CI(model3)
 
-# save results model 3
+# save results model 4.3
 m_row <- 4
 df00$model_ID[m_row] <- "HCS"
 df00$model_ID_n[m_row] <- m_row-1
@@ -243,7 +243,7 @@ df00$coef_FN_high[m_row] <- model3_est$upper[model3_est$estimate == "trait# Fled
 
 ##
 ##
-##### Model 4 - Trivariate model UN #####
+##### Model 4.4 - Trivariate model UN #####
 ##
 ##
 model4 <- rma.mv(yi = lnCVR, 
@@ -258,13 +258,13 @@ model4 <- rma.mv(yi = lnCVR,
                  struct=c("UN", "DIAG"), 
                  data=df_lnCVR, 
                  method="ML")
-#saveRDS(object = model4, "./models/Table_S4/lnCVR_model4.RDS")
-#model4 <- readRDS("./models/Table_S4/lnCVR_model4.RDS")
+#saveRDS(object = model4, "./models/Table_S4/MODEL4.4_lnCVR.RDS")
+#model4 <- readRDS("./models/Table_S4/MODEL4.4_lnCVR.RDS")
 
 summary(model4)
 model4_est <- estimates.CI(model4)
 
-# save results model 4
+# save results model 4.4
 m_row <- 5
 df00$model_ID[m_row] <- "UN"
 df00$model_ID_n[m_row] <- m_row-1
@@ -382,7 +382,7 @@ cvr_plot <- base_plot +
         axis.title.y = element_blank(),
         legend.position = "none")
 
-ggsave(filename = "./plots/Figure S6b.jpeg", 
+ggsave(filename = "./plots/Figure S4b.jpeg", 
        plot = cvr_plot, 
        device = "jpeg", 
        height = 75, 
@@ -396,8 +396,7 @@ base_plot <- orchard_plot_PCL_noApples(object = model1,
                                        est_point_size = 5,
                                        alpha = 0.5,
                                        cb = FALSE,
-                                       xlab = expression(atop("ln Coefficient of Variation Ratio (lnCVR)",
-                                                              ln (CV["Urban"]/CV["Non-urban"]))),
+                                       xlab = "ln Coefficient of Variation Ratio (lnCVR)",
                                        ylab = "Intercept",
                                        transfm = "none") +
   scale_fill_manual(values = rev(brewer.pal(n = 3, "Set2"))) +

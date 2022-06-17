@@ -6,7 +6,7 @@
 #' Capilla-Lasheras et al. 
 #' Preprint: https://doi.org/10.1101/2021.09.24.461498
 #' 
-#' Latest update: 2022/03/19
+#' Latest update: 2022/0617
 #' 
 ###
 ###
@@ -78,7 +78,7 @@ df00 <- data.frame(model_ID = rep(NA,n_models),
 
 ##
 ##
-##### Model 0 - Univariate model not accounting for heterogeneous variances #####
+##### Model 2.0 - Univariate model not accounting for heterogeneous variances #####
 ##
 ##
 model0 <- rma.mv(yi = lnRR, 
@@ -94,13 +94,13 @@ model0 <- rma.mv(yi = lnRR,
                  data=df_lnRR, 
                  method="ML")
 
-#saveRDS(object = model0, "./models/Table_S2/lnRR_model0.RDS")
-#model0 <- readRDS("./models/Table_S2/lnRR_model0.RDS")
+#saveRDS(object = model0, "./models/Table_S2/MODEL2.0_lnRR.RDS")
+#model0 <- readRDS("./models/Table_S2/MODEL2.0_lnRR.RDS")
 
 summary(model0)
 model0_est <- estimates.CI(model0)
 
-# save results model 0
+# save results model 2.0
 df00$model_ID[1] <- "NONE"
 df00$model_ID_n[1] <- 0
 df00$study_id_str[1] <- "NONE"
@@ -119,7 +119,7 @@ df00$coef_FN_high[1] <- model0_est$upper[model0_est$estimate == "trait# Fledglin
 
 ##
 ##
-##### Model 1 - Initial trivariate model DIAG #####
+##### Model 2.1 - Initial trivariate model DIAG #####
 ##
 ##
 model1 <- rma.mv(yi = lnRR, 
@@ -135,13 +135,13 @@ model1 <- rma.mv(yi = lnRR,
                  data=df_lnRR, 
                  method="ML")
 
-#saveRDS(object = model1, "./models/Table_S2/lnRR_model1.RDS")
-#model1 <- readRDS("./models/Table_S2/lnRR_model1.RDS")
+#saveRDS(object = model1, "./models/Table_S2/MODEL2.1_lnRR.RDS")
+#model1 <- readRDS("./models/Table_S2/MODEL2.1_lnRR.RDS")
 
 summary(model1)
 model1_est <- estimates.CI(model1)
 
-# save results model 1
+# save results model 2.1
 df00$model_ID[2] <- "DIAG"
 df00$model_ID_n[2] <- 1
 df00$study_id_str[2] <- "DIAG"
@@ -160,7 +160,7 @@ df00$coef_FN_high[2] <- model1_est$upper[model1_est$estimate == "trait# Fledglin
 
 ##
 ##
-##### Model 2 - Trivariate model CS #####
+##### Model 2.2 - Trivariate model CS #####
 ##
 ##
 model2 <- rma.mv(yi = lnRR, 
@@ -175,13 +175,13 @@ model2 <- rma.mv(yi = lnRR,
                  struct=c("CS", "DIAG"), 
                  data=df_lnRR, 
                  method="ML")
-#saveRDS(object = model2, "./models/Table_S2/lnRR_model2.RDS")
-#model2 <- readRDS("./models/Table_S2/lnRR_model2.RDS")
+#saveRDS(object = model2, "./models/Table_S2/MODEL2.2_lnRR.RDS")
+#model2 <- readRDS("./models/Table_S2/MODEL2.2_lnRR.RDS")
 
 summary(model2)
 model2_est <- estimates.CI(model2)
 
-# save results model 2
+# save results model 2.2
 m_row <- 3
 df00$model_ID[m_row] <- "CS"
 df00$model_ID_n[m_row] <- m_row-1
@@ -201,7 +201,7 @@ df00$coef_FN_high[m_row] <- model2_est$upper[model2_est$estimate == "trait# Fled
 
 ##
 ##
-##### Model 3 - Trivariate model HCS #####
+##### Model 2.3 - Trivariate model HCS #####
 ##
 ##
 model3 <- rma.mv(yi = lnRR, 
@@ -216,13 +216,13 @@ model3 <- rma.mv(yi = lnRR,
                  struct=c("HCS", "DIAG"), 
                  data=df_lnRR, 
                  method="ML")
-#saveRDS(object = model3, "./models/Table_S2/lnRR_model3.RDS")
-#model3 <- readRDS("./models/Table_S2/lnRR_model3.RDS")
+#saveRDS(object = model3, "./models/Table_S2/MODEL2.3_lnRR.RDS")
+#model3 <- readRDS("./models/Table_S2/MODEL2.3_lnRR.RDS")
 
 summary(model3)
 model3_est <- estimates.CI(model3)
 
-# save results model 3
+# save results model 2.3
 m_row <- 4
 df00$model_ID[m_row] <- "HCS"
 df00$model_ID_n[m_row] <- m_row-1
@@ -242,7 +242,7 @@ df00$coef_FN_high[m_row] <- model3_est$upper[model3_est$estimate == "trait# Fled
 
 ##
 ##
-##### Model 4 - Trivariate model UN #####
+##### Model 2.4 - Trivariate model UN #####
 ##
 ##
 model4 <- rma.mv(yi = lnRR, scale = F, 
@@ -257,12 +257,12 @@ model4 <- rma.mv(yi = lnRR, scale = F,
                  struct=c("UN", "DIAG"), 
                  data=df_lnRR, 
                  method="ML")
-#saveRDS(object = model4, "./models/Table_S2/lnRR_model4.RDS")
-#model4 <- readRDS("./models/Table_S2/lnRR_model4.RDS")
+#saveRDS(object = model4, "./models/Table_S2/MODEL2.4_lnRR.RDS")
+#model4 <- readRDS("./models/Table_S2/MODEL2.4_lnRR.RDS")
 
 ##
 ## top model, as shown in Table S2 (see below)
-summary(model4)
+summary(model4) ## MODEL 2 in main text
 r2_ml(model4)
 model4_est <- estimates.CI(model4)
 
@@ -386,7 +386,7 @@ lnRR_plot_data <- base_plot +
         legend.position = "none") 
 
 
-ggsave(filename = "./plots/Figure S6a.jpeg", 
+ggsave(filename = "./plots/Figure S4a.jpeg", 
        plot = lnRR_plot_data, 
        device = "jpeg", 
        height = 75, 

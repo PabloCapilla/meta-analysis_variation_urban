@@ -1,6 +1,8 @@
 ##
 ## function to combined means and sds across groups of observations
 ##
+
+
 combine_groups <- function(means, sds, ns) {
   
   ## compute combined means

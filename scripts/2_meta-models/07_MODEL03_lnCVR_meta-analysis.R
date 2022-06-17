@@ -6,7 +6,7 @@
 #' Capilla-Lasheras et al. 
 #' Preprint: https://doi.org/10.1101/2021.09.24.461498
 #' 
-#' Latest update: 2022/03/18
+#' Latest update: 2022/06/16
 #' 
 ###
 ###
@@ -66,29 +66,6 @@ model_lnCVR <- rma.mv(yi = lnCVR,
 summary(model_lnCVR) 
 round(i2_ml(model_lnCVR), digits = 4)
 
-##
-##### Model 1b without imputed values #####
-##
-
-#
-# removing imputed SD values from dataset produces virtually same results
-df_lnCVR_no_input <- df_lnCVR %>% 
-  filter(sd_imputation_urban == "NONE") %>% 
-  filter(sd_imputation_rural == "NONE")
-
-model_lnCVR_no_input <- rma.mv(yi = lnCVR, 
-                    V = lnCVR.sv, 
-                    mods = ~1, 
-                    random = list(~1|study_ID,
-                                  ~1|Pop_ID,
-                                  ~1|obsID, 
-                                  ~1|scientific_name_phylo,
-                                  ~1|scientific_name),
-                    R = list(scientific_name_phylo = phylo_cor), 
-                    data = df_lnCVR_no_input,
-                    method = "REML") # model produces warning as some species in the matrix don't appear in trimmed dataset
-summary(logCVR_FD_no_input) 
-round(i2_ml(logCVR_FD_no_input), digits = 4)
 
 ##
 ##

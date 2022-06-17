@@ -6,7 +6,7 @@
 #' Capilla-Lasheras et al. 
 #' Preprint: https://doi.org/10.1101/2021.09.24.461498
 #' 
-#' Latest update: 2022/03/18
+#' Latest update: 2022/06/17
 #' 
 ###
 ###
@@ -37,6 +37,7 @@ loadfonts()
 ##
 data <- readRDS("./data/processed_RDS_data_files/metaanalysis_full_data.RDS")
 head(data)
+
 
 ##
 ##### recovering phylogenetic relationship #####
@@ -100,9 +101,9 @@ p2 <- ggtree(tree, size = 1.2) %<+% phylo_bar +
   geom_tiplab(aes(label = paste0("italic('", sub(x = label, pattern = "_", replacement = " "), "')")), 
               parse = TRUE, 
               offset = 0.5,
-              size = 2.8,
+              size = 5,
               hjust = 0) +
-  geom_text(aes(label = total_obs, x = 36), size = 2.5)
+  geom_text(aes(label = total_obs, x = 36), size = 5)
  
 ##
 ## add panel with proportion of data per species and trait
@@ -113,19 +114,19 @@ panel <- facet_plot(p2,
            mapping = aes(x = value, fill = trait, color = trait),
            position="stackv") +
   theme(legend.position = "bottom") +
-  theme(strip.text = element_text(size = 10, "Arial"),
+  theme(strip.text = element_text(size = 15, "Arial"),
         strip.background = element_blank(),
-        legend.text = element_text(size = 7, "Arial"),
+        legend.text = element_text(size = 15, "Arial"),
         legend.title = element_blank()) +
   scale_fill_manual(values = brewer.pal(n = 3, name = "Set2")) +
   scale_color_manual(values = brewer.pal(n = 3, name = "Set2"))
 
 
-ggsave(filename = "./plots/Figure 1a.jpeg",
-       height = 110, 
+ggsave(filename = "./plots/Figure 1a.png",
+       height = 180, 
        plot = panel, 
-       device = "jpeg", 
-       width = 150, 
+       device = "png", 
+       width = 220, 
        units = "mm")
 
 
