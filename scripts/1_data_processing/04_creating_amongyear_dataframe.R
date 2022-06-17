@@ -121,9 +121,7 @@ for(s in 1:length(study_ids)){
                                                     exact_urban_coor = unique(df_calc$exact_urban_coor),
                                                     rural_lat = unique(df_calc$rural_lat),
                                                     rural_lon = unique(df_calc$rural_lon),
-                                                    exact_rural_coor = unique(df_calc$exact_rural_coor),
-                                                    sd_imputation_urban = unique(df_calc$sd_imputation_urban),
-                                                    sd_imputation_rural =unique(df_calc$sd_imputation_rural))
+                                                    exact_rural_coor = unique(df_calc$exact_rural_coor))
       }
     }
   }
@@ -180,7 +178,6 @@ multi_year <- multi_year %>%
          urban_mean, urban_sd, urban_n, rural_mean, rural_sd, rural_n,
          first_year, publication_year,
          urban_lat, urban_lon, exact_urban_coor, rural_lat, rural_lon, exact_rural_coor,
-         sd_imputation_urban, sd_imputation_rural,
          lnCVR, lnCVR.sv, lnVR, lnVR.sv, lnRR, lnRR.sv) %>% 
   mutate(method_combine = "original")
 
