@@ -245,7 +245,7 @@ df00$coef_FN_high[m_row] <- model3_est$upper[model3_est$estimate == "trait# Fled
 ##### Model 2.4 - Trivariate model UN #####
 ##
 ##
-model4 <- rma.mv(yi = lnRR, scale = F, 
+model4 <- rma.mv(yi = lnRR, 
                  V = lnRR.sv, 
                  mods = ~ trait - 1, 
                  random =  list(~trait|study_ID,

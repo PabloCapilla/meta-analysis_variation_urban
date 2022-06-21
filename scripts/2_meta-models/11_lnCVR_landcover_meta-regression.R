@@ -6,7 +6,7 @@
 #' Capilla-Lasheras et al. 
 #' Preprint: https://doi.org/10.1101/2021.09.24.461498
 #' 
-#' Latest update: 2022/03/24
+#' Latest update: 2022/06/20
 #' 
 ###
 ###
@@ -35,10 +35,10 @@ source("./scripts/R_library/FUNCTION_lc_selection.R")
 ##
 ##### data #####
 ##
-data <- readRDS("./data/processed_RDS_data_files/landcover_dataframe.RDS") # data including landcover variables
+data <- readRDS("./data/processed_RDS_data_files/metaanalysis_full_data_landcover.RDS") # data including landcover variables
 
 # matrix with phylogentic correlations
-phylo_cor <- readRDS("./data/processed_RDS_data_files/phylogenetic_correlations_landcover_models.RDS")
+phylo_cor <- readRDS("./data/processed_RDS_data_files/phylogenetic_correlations_lancover_model.RDS")
 
 ##
 ##
@@ -53,14 +53,20 @@ for(m in 1:length(buffer_size)){
   df_analysis <- lc_selection (df = data, 
                                buffer_size = buffer_size[m]) 
   
+  
+  
   ## clean and accurate data for model
   df_CVR_exact <- df_analysis %>% 
+    select(exact_urban_coor, exact_rural_coor, study_ID, Pop_ID, scientific_name_phylo, 
+           scientific_name, trait, lnCVR, lnCVR.sv,
+           urban_urban_value, urban_het, nonurban_urban_value, nonurban_het) %>% 
     filter(!is.na(lnCVR)) %>% 
     filter(!is.na(lnCVR.sv)) %>%  
     filter(exact_urban_coor == "YES") %>% 
     filter(exact_rural_coor == "YES") %>% 
-    mutate(urban_dif = urban_urban_value - rural_urban_value,
-           het_dif = urban_het - rural_het)
+    mutate(urban_dif = urban_urban_value - nonurban_urban_value,
+           het_dif = urban_het - nonurban_het)
+  df_CVR_exact$obsID <- 1:nrow(df_CVR_exact)
   
   # difference in urban index across populations (including one observation per study)
   m_urban <- lm(urban_dif ~ 1, 
@@ -70,38 +76,34 @@ for(m in 1:length(buffer_size)){
   m_urban_summary <- summary(m_urban)
   
   # meta-model
-  model1 <- rma.mv(yi = lnCVR, 
-                   V = lnCVR.sv, 
-                   mods = ~
-                     trait - 1 +
-                     urban_dif +
-                     het_dif,
-                   random =  list(~trait|study_ID,
-                                  ~trait|obsID, 
-                                  ~1|Pop_ID,
-                                  ~1|scientific_name_phylo,
-                                  ~1|scientific_name),
-                   R = list(scientific_name_phylo = phylo_cor), 
-                   struct=c("DIAG", "DIAG"), 
-                   data=df_CVR_exact, 
-                   method="REML")
+  model_metaregression <- rma.mv(yi = lnCVR, 
+                                 V = lnCVR.sv, 
+                                 mods = ~
+                                   trait - 1 +
+                                   urban_dif +
+                                   het_dif,
+                                 random =  list(~trait|study_ID,
+                                                ~trait|obsID, 
+                                                ~1|Pop_ID,
+                                                ~1|scientific_name_phylo,
+                                                ~1|scientific_name),
+                                 R = list(scientific_name_phylo = phylo_cor), 
+                                 struct=c("DIAG", "DIAG"), 
+                                 data=df_CVR_exact, 
+                                 method="REML", 
+                                 control=list(optimizer="BFGS", iter.max=1000, rel.tol=1e-8)) # to improve convergence
   
   # saving model output
   file_name <- paste0("LC_model_Buffer", buffer_size[m], ".RDS")
-  saveRDS(model1, file = paste0("./models/land_cover_models/", file_name))
-  model1_est <- estimates.CI(model1)
+  saveRDS(model_metaregression, file = paste0("./models/land_cover_models/", file_name))
+  model_metaregression_est <- estimates.CI(model_metaregression)
   
   # save model results
-  df00[[m]] <- model1_est
+  df00[[m]] <- model_metaregression_est
   
   df00[[m]]["dif_urban"] <- m_urban_summary$coefficients[1,1]
   df00[[m]]["se_dif_urban"] <- m_urban_summary$coefficients[1,2]
   df00[[m]]["p_dif_urban"] <- m_urban_summary$coefficients[1,4]
-  
-  df00[[m]]["dif_het"] <- sumarry_model$coefficients[1,1]
-  df00[[m]]["se_dif_het"] <- sumarry_model$coefficients[1,2]
-  df00[[m]]["p_dif_het"] <- sumarry_model$coefficients[1,4]
-  
   df00[[m]]["buffer"] <- buffer_size[m]
   
   # message
@@ -112,7 +114,7 @@ df <- rbindlist(df00)
 
 ## save results
 #saveRDS(object = df, 
-#       file = "./models/land_cover_models/LC_model_summary_lnCVR.RDS")
+ #      file = "./models/land_cover_models/LC_model_summary_lnCVR.RDS")
 
 
 ##
@@ -175,7 +177,7 @@ urban_effect <- ggplot(data = df %>%
   geom_point(size = 4, shape = 21, 
              position = position_dodge(width = 25),
              color = "black") +
-  scale_y_continuous(limits = c(-0.6, 0.6)) +
+  scale_y_continuous(limits = c(-0.7, 0.7)) +
   scale_x_continuous(breaks = seq(250, 5000, 250), 
                      labels = labels_x) +
   scale_fill_manual(values = "#8DA0CB") +
@@ -208,7 +210,7 @@ het_effect <- ggplot(data = df %>%
   geom_point(size = 4, shape = 21, 
              position = position_dodge(width = 25),
              color = "black") +
-  scale_y_continuous(limits = c(-0.12, 0.1)) +
+  scale_y_continuous(limits = c(-0.13, 0.07)) +
   scale_x_continuous(breaks = seq(250, 5000, 250), 
                      labels = labels_x) +
   scale_fill_manual(values = "#8DA0CB") +

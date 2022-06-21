@@ -6,7 +6,7 @@
 #' Capilla-Lasheras et al. 
 #' Preprint: https://doi.org/10.1101/2021.09.24.461498
 #' 
-#' Latest update: 2022/0608
+#' Latest update: 2022/06/20
 #' 
 ###
 ###
@@ -17,9 +17,9 @@ rm(list=ls())
 ##
 ##
 ##### Script aim: #####
-#' Meta-analysis of lnSD using arm-based model 
-#' (see Senior et al. 2016 and Eq. 18 in Nakagawa et al. 2015). 
-#' This additional model is used as a sensitivity analysis to confirm our results analysing lnCVR.
+#' Sensitivity analysis of lnRR and lnCVR results.
+#' * lnRR analysis repeated using SMDH
+#' * lnCVR analysis repeated using lnVR and arm-based model following Senior et al. 2016 Evolution, Medicine and Public Health
 #' 
 ##
 ##
@@ -27,13 +27,18 @@ rm(list=ls())
 ##
 ##### libraries #####
 ##
-pacman::p_load(dplyr, tidyr, extrafont, metafor, ggplot2, orchaRd) 
+pacman::p_load(dplyr, tidyr, extrafont, metafor, ggplot2, orchaRd, DT) 
 loadfonts()
+source("./scripts/R_library/functions.R")
 source("./scripts/R_library/orchard_plot_PCL.R")
+source("./scripts/R_library/orchard_plot_PCL_noApples.R")
 
 ##
-##### data #####
 ##
+##### Data #####
+##
+##
+# ES data
 data <- readRDS("./data/processed_RDS_data_files/metaanalysis_full_data.RDS")
 data$obsID <- 1:nrow(data)
 data$scientific_name <- gsub(x = data$scientific_name, 
@@ -44,6 +49,90 @@ head(data)
 
 # matrix with phylogentic correlations
 phylo_cor <- readRDS("./data/processed_RDS_data_files/phylogenetic_correlations.RDS")
+
+
+##
+##
+##### Sensitivity analysis of lnRR #####
+##
+##
+
+## data for lnRR
+df_SMDH <- data %>%
+  filter(!is.na(SMDH)) %>% 
+  filter(!is.na(SMDH.sv))
+
+# SMDH model (same model that used for lnRR - MODEL 2)
+model_mean_SMDH <- rma.mv(yi = SMDH, 
+                 V = SMDH.sv, 
+                 mods = ~ trait - 1, 
+                 random =  list(~trait|study_ID,
+                                ~trait|obsID, 
+                                ~1|Pop_ID,
+                                ~1|scientific_name_phylo,
+                                ~1|scientific_name),
+                 R = list(scientific_name_phylo = phylo_cor), #phylogenetic relatedness
+                 struct=c("UN", "DIAG"), 
+                 data=df_SMDH,
+                 method="REML")
+summary(model_mean_SMDH)
+
+orchard_plot_PCL(object = model_mean_SMDH, 
+                 mod = " ", 
+                 est_point_size = 5,
+                 alpha = 0.5,
+                 cb = FALSE,
+                 xlab = "SMDH",
+                 ylab = "Intercept",
+                 transfm = "none") +
+  scale_fill_manual(values = rev(brewer.pal(n = 3, "Set2"))) +
+  scale_color_manual(values = rev(brewer.pal(n = 3, "Set2"))) +
+  scale_y_discrete(labels = c("Laying date", "Clutch size", "# fledlgings"))
+
+##
+##
+##### Sensitivity analysis of lnCVR #####
+##
+##
+
+## data for lnVR
+df_lnVR <- data %>%
+  filter(!is.na(lnVR)) %>% 
+  filter(!is.na(lnVR.sv))
+
+##
+## Analysis of lnVR
+model_var_lnVR <- rma.mv(yi = lnVR, 
+                         V = lnVR.sv, 
+                         mods = ~ trait - 1, 
+                         random =  list(~trait|study_ID,
+                                        ~trait|obsID, 
+                                        ~1|Pop_ID,
+                                        ~1|scientific_name_phylo,
+                                        ~1|scientific_name),
+                         R = list(scientific_name_phylo = phylo_cor), #phylogenetic relatedness
+                         struct=c("DIAG", "DIAG"), 
+                         data=df_lnVR, 
+                         method="REML")
+summary(model_var_lnVR)
+
+## 
+## plot for lnVR
+orchard_plot_PCL(object = model_var_lnVR, 
+                 mod = " ", 
+                 est_point_size = 5,
+                 alpha = 0.5,
+                 cb = FALSE,
+                 xlab = "log Total Variation Ratio (lnVR)",
+                 ylab = "Intercept",
+                 transfm = "none") +
+  scale_fill_manual(values = rev(brewer.pal(n = 3, "Set2"))) +
+  scale_color_manual(values = rev(brewer.pal(n = 3, "Set2"))) +
+  scale_y_discrete(labels = c("Laying date", "Clutch size", "# fledlgings"))
+
+
+##
+## Arm-based model ln lnSD
 
 ##
 ## data for model
@@ -76,8 +165,7 @@ dataSD <- dataSD %>%
 
 
 ##
-##### Arm-based model for lnSD in laying date #####
-##
+## Arm-based model for lnSD in laying date
 model_layingdate_lnSD <- rma.mv(yi = lnSD, 
                                 V = sampling_variance_SD, 
                                 mods = ~ habitat + lnMEAN + 1, 
@@ -90,12 +178,10 @@ model_layingdate_lnSD <- rma.mv(yi = lnSD,
                                 data = dataSD %>% 
                                   filter(trait == "Laying date"),
                                 method = "REML")
-
-
 summary(model_layingdate_lnSD) 
-round(i2_ml(model_layingdate_lnSD), digits = 4)
-round(r2_ml(model_layingdate_lnSD), digits = 4)
 
+##
+## Arm-based model for lnSD in clutch size
 model_clutchsize_lnSD <- rma.mv(yi = lnSD, 
                                 V = sampling_variance_SD, 
                                 mods = ~ habitat + lnMEAN + 1, 
@@ -111,7 +197,8 @@ model_clutchsize_lnSD <- rma.mv(yi = lnSD,
 summary(model_clutchsize_lnSD) 
 round(i2_ml(model_lnCVR), digits = 4)
 
-
+##
+## Arm-based model for lnSD in fledlging number
 model_fledglings_lnSD <- rma.mv(yi = lnSD, 
                                 V = sampling_variance_SD, 
                                 mods = ~ habitat + lnMEAN + 1, 
@@ -125,6 +212,7 @@ model_fledglings_lnSD <- rma.mv(yi = lnSD,
                                   filter(trait == "# Fledglings"),
                                 method = "REML")
 summary(model_fledglings_lnSD) 
-round(i2_ml(model_fledglings_lnSD), digits = 4)
+
+
 
 

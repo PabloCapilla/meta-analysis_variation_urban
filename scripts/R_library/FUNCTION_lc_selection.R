@@ -10,10 +10,10 @@ lc_selection <- function(df, buffer_size) {
   df[["rural_het"]] <- NA
   
   for(i in 1:nrow(df)){
-      df[["urban_urban_value"]][i] <- df[[paste0("urbanization.", buffer_size,"_urban")]][i]
-      df[["urban_het"]][i] <- df[[paste0("heterogeneity.", buffer_size,"_urban")]][i]
-      df[["rural_urban_value"]][i] <- df[[paste0("urbanization.", buffer_size,"_rural")]][i]
-      df[["rural_het"]][i] <- df[[paste0("heterogeneity.", buffer_size,"_rural")]][i]
+      df[["urban_urban_value"]][i] <- df[[paste0("urban_urbanization_", buffer_size)]][i]
+      df[["urban_het"]][i] <- df[[paste0("urban_heterogeneity_", buffer_size)]][i]
+      df[["nonurban_urban_value"]][i] <- df[[paste0("nonurban_urbanization_", buffer_size)]][i]
+      df[["nonurban_het"]][i] <- df[[paste0("nonurban_heterogeneity_", buffer_size)]][i]
   }
   return(df)
 }
