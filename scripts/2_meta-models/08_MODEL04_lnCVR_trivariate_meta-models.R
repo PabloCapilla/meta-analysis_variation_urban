@@ -2,11 +2,11 @@
 ###
 #' 
 #' Script for:
-#' A global meta-analysis reveals higher life-history phenotypic variation in urban birds than in their non-urban neighbours
+#' A global meta-analysis reveals higher phenological variation in urban birds than in their non-urban neighbours
 #' Capilla-Lasheras et al. 
 #' Preprint: https://doi.org/10.1101/2021.09.24.461498
 #' 
-#' Latest update: 2022/06/17
+#' Latest update: 2022/06/22
 #' 
 ###
 ###
@@ -92,7 +92,8 @@ model0 <- rma.mv(yi = lnCVR,
                  R = list(scientific_name_phylo = phylo_cor),
                  struct=c("DIAG"),  
                  data=df_lnCVR, 
-                 method="ML")
+                 method="ML",
+                 control=list(optimizer="BFGS", iter.max=1000, rel.tol=1e-8))
 #saveRDS(object = model0, "./models/Table_S4/MODEL4.0_lnCVR.RDS")
 #model0 <- readRDS("./models/Table_S4/MODEL4.0_lnCVR.RDS")
 
@@ -138,7 +139,7 @@ model1 <- rma.mv(yi = lnCVR,
 
 ##
 ## top model, as shown in Table S4 (see below)
-summary(model1) # MODEL 4 in main text
+summary(model1) # MODEL 4 in main text (see below for a REML fit)
 r2_ml(model1)
 model1_est <- estimates.CI(model1)
 
@@ -360,9 +361,26 @@ lnCVR_model_selec_plot <- ggplot(data = df01,
 
 ##
 ##
-##### Plot of the best model #####
+##### Results and plot from top model - MODEL 4 in main text #####
 ##
 ##
+
+# model results (REML fit, as shown in Table S4)
+model4.1 <- rma.mv(yi = lnCVR, 
+                   V = lnCVR.sv, 
+                   mods = ~ trait - 1, 
+                   random =  list(~trait|study_ID,
+                                  ~trait|obsID, 
+                                  ~1|Pop_ID,
+                                  ~1|scientific_name_phylo,
+                                  ~1|scientific_name),
+                   R = list(scientific_name_phylo = phylo_cor), #phylogenetic relatedness
+                   struct=c("DIAG", "DIAG"), 
+                   data=df_lnCVR, 
+                   method="REML")
+summary(model4.1)
+
+# plot of results
 base_plot <- orchard_plot_PCL(object = model1, 
                               mod = " ", 
                               est_point_size = 5,

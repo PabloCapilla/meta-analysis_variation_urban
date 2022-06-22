@@ -2,11 +2,11 @@
 ###
 #' 
 #' Script for:
-#' A global meta-analysis reveals higher life-history phenotypic variation in urban birds than in their non-urban neighbours
+#' A global meta-analysis reveals higher phenological variation in urban birds than in their non-urban neighbours
 #' Capilla-Lasheras et al. 
 #' Preprint: https://doi.org/10.1101/2021.09.24.461498
 #' 
-#' Latest update: 2022/06/17
+#' Latest update: 2022/06/22
 #' 
 ###
 ###
@@ -17,7 +17,8 @@ rm(list=ls())
 ##
 ##
 ##### Script aim: #####
-#' Script for within-year meta-model of CVR in laying date, cluth size and number of fledglings
+#' Script for within-year meta-model of CVR in laying date, clutch size and number of fledglings.
+#' Model 5 in main text.
 #' 
 ##
 ##
@@ -50,7 +51,7 @@ df_lnCVR_wihtin <- data %>%
 
 
 ##
-##### Meta-analysis lnCVR within seasons #####
+##### Meta-analysis lnCVR within seasons - MODEL 5 in main text #####
 ##
 lnCVR_wihtin <- rma.mv(yi = lnCVR, 
                  V = lnCVR.sv, 

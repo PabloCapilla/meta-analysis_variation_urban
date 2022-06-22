@@ -2,11 +2,11 @@
 ###
 #' 
 #' Script for:
-#' A global meta-analysis reveals higher life-history phenotypic variation in urban birds than in their non-urban neighbours
+#' A global meta-analysis reveals higher phenological variation in urban birds than in their non-urban neighbours
 #' Capilla-Lasheras et al. 
 #' Preprint: https://doi.org/10.1101/2021.09.24.461498
 #' 
-#' Latest update: 2022/0617
+#' Latest update: 2022/06/22
 #' 
 ###
 ###
@@ -51,13 +51,16 @@ df_lnRR <- data %>%
   filter(!is.na(lnRR)) %>% 
   filter(!is.na(lnRR.sv))
 
+# list of papers data extracted from to be cited
+write.csv(x = unique(df_lnRR$study_ID), file = "data/List of study IDs data extracted from.csv" )
+
 # manually inspect very large lnRR 
 df_lnRR %>% 
   filter(lnRR < -2) # manually inspected and seemingly fine
 
 
 ##
-##### Meta-analysis lnRR - MODEL 1 #####
+##### Meta-analysis lnRR - MODEL 1 in main text #####
 ##
 model_lnRR <- rma.mv(yi = lnRR, 
                       V = lnRR.sv, 
@@ -99,9 +102,9 @@ lnRR_plot <- lnRR_plot +
         axis.text.y = element_blank(),
         legend.position = "none") 
 
-ggsave(filename = "./plots/Figure S3.jpeg", 
+ggsave(filename = "./plots/Figure S3.png", 
        plot = lnRR_plot, 
-       device = "jpeg", 
+       device = "png", 
        height = 90, 
        width = 150, 
        units = "mm")
@@ -116,9 +119,9 @@ lnRR_plot_close <- lnRR_plot +
   scale_x_continuous(limits = c(-0.50, 0.50)) 
   
 
-ggsave(filename = "./plots/Figure S3 snippet.jpeg", 
+ggsave(filename = "./plots/Figure S3 snippet.png", 
        plot = lnRR_plot_close, 
-       device = "jpeg", 
+       device = "png", 
        height = 50, 
        width = 100, 
        units = "mm")

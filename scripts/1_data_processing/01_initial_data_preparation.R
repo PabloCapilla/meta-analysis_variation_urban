@@ -2,11 +2,11 @@
 ###
 #' 
 #' Script for:
-#' A global meta-analysis reveals higher phenotypic variation in urban birds than in their non-urban neighbours
+#' A global meta-analysis reveals higher phenological variation in urban birds than in their non-urban neighbours
 #' Capilla-Lasheras et al. 
 #' Preprint: https://doi.org/10.1101/2021.09.24.461498
 #' 
-#' Latest update: 2022/06/17
+#' Latest update: 2022/06/21
 #' 
 ###
 ###

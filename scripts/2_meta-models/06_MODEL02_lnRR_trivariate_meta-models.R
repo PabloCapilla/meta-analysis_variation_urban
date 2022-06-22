@@ -2,11 +2,11 @@
 ###
 #' 
 #' Script for:
-#' A global meta-analysis reveals higher life-history phenotypic variation in urban birds than in their non-urban neighbours
+#' A global meta-analysis reveals higher phenological variation in urban birds than in their non-urban neighbours
 #' Capilla-Lasheras et al. 
 #' Preprint: https://doi.org/10.1101/2021.09.24.461498
 #' 
-#' Latest update: 2022/0617
+#' Latest update: 2022/06/22
 #' 
 ###
 ###
@@ -26,7 +26,7 @@ rm(list=ls())
 ##
 ##### libraries and help functions #####
 ##
-pacman::p_load(dplyr, tidyr, extrafont, metafor, ggplot2, orchaRd, DT) 
+pacman::p_load(dplyr, tidyr, extrafont, metafor, ggplot2, orchaRd, DT, RColorBrewer) 
 loadfonts()
 source("./scripts/R_library/functions.R")
 source("./scripts/R_library/orchard_plot_PCL.R")
@@ -133,7 +133,8 @@ model1 <- rma.mv(yi = lnRR,
                  R = list(scientific_name_phylo = phylo_cor), #phylogenetic relatedness
                  struct=c("DIAG", "DIAG"), 
                  data=df_lnRR, 
-                 method="ML")
+                 method="ML",
+                 control=list(optimizer="BFGS", iter.max=1000, rel.tol=1e-8)) #improve convergence
 
 #saveRDS(object = model1, "./models/Table_S2/MODEL2.1_lnRR.RDS")
 #model1 <- readRDS("./models/Table_S2/MODEL2.1_lnRR.RDS")
@@ -261,8 +262,8 @@ model4 <- rma.mv(yi = lnRR,
 #model4 <- readRDS("./models/Table_S2/MODEL2.4_lnRR.RDS")
 
 ##
-## top model, as shown in Table S2 (see below)
-summary(model4) ## MODEL 2 in main text
+## top model
+summary(model4) ## MODEL 2 in main text (see below for a REML fit)
 r2_ml(model4)
 model4_est <- estimates.CI(model4)
 
@@ -362,10 +363,27 @@ lnRR_model_selec_plot <- ggplot(data = df01,
 
 ##
 ##
-##### Plotting results from top model #####
+##### Results and plot from top model - MODEL 2 in main text #####
 ##
 ##
-base_plot <- orchard_plot_PCL(object = model4, 
+
+# model results (REML fit, as shown in Table S2)
+model2.4 <- rma.mv(yi = lnRR, 
+                 V = lnRR.sv, 
+                 mods = ~ trait - 1, 
+                 random =  list(~trait|study_ID,
+                                ~trait|obsID, 
+                                ~1|Pop_ID,
+                                ~1|scientific_name_phylo,
+                                ~1|scientific_name),
+                 R = list(scientific_name_phylo = phylo_cor), #phylogenetic relatedness
+                 struct=c("UN", "DIAG"), 
+                 data=df_lnRR, 
+                 method="REML")
+summary(model2.4)
+
+# plot of results
+base_plot <- orchard_plot_PCL(object = model2.4, 
                               mod = " ", 
                               est_point_size = 5,
                               alpha = 0.5,
@@ -558,3 +576,4 @@ ggsave(filename = "./plots/Figure 3c.jpg",
        width = 100, 
        device = "jpeg", 
        units = "mm")
+

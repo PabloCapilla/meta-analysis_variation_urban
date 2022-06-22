@@ -2,11 +2,11 @@
 ###
 #' 
 #' Script for:
-#' A global meta-analysis reveals higher life-history phenotypic variation in urban birds than in their non-urban neighbours
+#' A global meta-analysis reveals higher phenological variation in urban birds than in their non-urban neighbours
 #' Capilla-Lasheras et al. 
 #' Preprint: https://doi.org/10.1101/2021.09.24.461498
 #' 
-#' Latest update: 2022/06/20
+#' Latest update: 2022/06/22
 #' 
 ###
 ###
@@ -17,7 +17,8 @@ rm(list=ls())
 ##
 ##
 ##### Script aim: #####
-#' Script for meta-regressions of lnCVR including land cover data as moderators (uban index and habitat heterogeneity)
+#' Script for meta-regressions of lnCVR including land cover data as moderators 
+#' (difference in urban index and habitat heterogeneity).
 #' 
 ##
 ##
@@ -39,6 +40,32 @@ data <- readRDS("./data/processed_RDS_data_files/metaanalysis_full_data_landcove
 
 # matrix with phylogentic correlations
 phylo_cor <- readRDS("./data/processed_RDS_data_files/phylogenetic_correlations_lancover_model.RDS")
+
+##
+##
+##### Sample size (choose one buffer randomly to summarise sample sizes) #####
+##
+##
+
+## 'lc_selection' function in 'R_library' folder
+
+df_samplesize <- lc_selection (df = data, 
+                               buffer_size = 2000) 
+range(df_samplesize$year) # year range
+nrow(df_samplesize) # number of observations
+length(unique(df_samplesize$study_ID)) # number of studies
+length(unique(df_samplesize$species_ID)) # number of species
+
+# differences in urbanisation score at buffer 2000m
+df_samplesize %>% 
+  group_by(study_ID) %>% 
+  filter(row_number() == 1) %>% 
+  ungroup() %>% 
+  summarise(mean_urban = mean(urban_urban_value),
+            se_urban = sd(urban_urban_value)/sqrt(n()),
+            mean_nonurban = mean(nonurban_urban_value),
+            se_nonurban = sd(nonurban_urban_value)/sqrt(n()),)
+
 
 ##
 ##

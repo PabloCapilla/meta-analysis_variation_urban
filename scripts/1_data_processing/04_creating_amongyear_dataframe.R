@@ -2,11 +2,11 @@
 ###
 #' 
 #' Script for:
-#' A global meta-analysis reveals higher life-history phenotypic variation in urban birds than in their non-urban neighbours
+#' A global meta-analysis reveals higher phenological variation in urban birds than in their non-urban neighbours
 #' Capilla-Lasheras et al. 
 #' Preprint: https://doi.org/10.1101/2021.09.24.461498
 #' 
-#' Latest update: 2022/03/19
+#' Latest update: 2022/06/22
 #' 
 ###
 ###
@@ -48,8 +48,10 @@ sum_studies <- single_year %>%
   summarise(n_per_study = n()) %>% 
   arrange(desc(n_per_study)) %>% 
   filter(n_per_study > 1) 
+length(unique(sum_studies$study_ID)) # number of studies with per-year estimates to be combined
 table(sum_studies$trait)
 
+nrow(multi_year) # observations across years in original dataset
 
 ##
 #### Function to calculate mean and sd among years from single year data #####
@@ -182,7 +184,7 @@ multi_year <- multi_year %>%
   mutate(method_combine = "original")
 
 data_combined <- rbind(among_df,multi_year)
-                          
+nrow(data_combined)                         
 
 ## quick visualisation of new data set
 ggplot(data = data_combined, aes(x = trait, y = lnCVR, fill = method_combine)) +
@@ -197,6 +199,9 @@ ggplot(data = data_combined, aes(x = trait, y = lnVR, lnCVR, fill = method_combi
   geom_boxplot() +
   theme_bw()
 
+# sample size for within year analysis
+nrow(data_combined) # number of observations
+length(unique(single_year$study_ID)) # number of studies
 
 
 ##

@@ -2,18 +2,17 @@
 ###
 #' 
 #' Script for:
-#' A global meta-analysis reveals higher life-history phenotypic variation in urban birds than in their non-urban neighbours
+#' A global meta-analysis reveals higher phenological variation in urban birds than in their non-urban neighbours
 #' Capilla-Lasheras et al. 
 #' Preprint: https://doi.org/10.1101/2021.09.24.461498
 #' 
-#' Latest update: 2022/06/20
+#' Latest update: 2022/06/22
 #' 
 ###
 ###
 
 # Clear memory to make sure there are not files loaded that could cause problems
 rm(list=ls())
-
 ##
 ##
 ##### Script aim: #####
@@ -27,7 +26,7 @@ rm(list=ls())
 ##
 ##### libraries #####
 ##
-pacman::p_load(dplyr, tidyr, extrafont, metafor, ggplot2, orchaRd, DT) 
+pacman::p_load(dplyr, tidyr, extrafont, metafor, ggplot2, orchaRd, DT, RColorBrewer) 
 loadfonts()
 source("./scripts/R_library/functions.R")
 source("./scripts/R_library/orchard_plot_PCL.R")
@@ -85,10 +84,18 @@ orchard_plot_PCL(object = model_mean_SMDH,
                  xlab = "SMDH",
                  ylab = "Intercept",
                  transfm = "none") +
+  theme(axis.title = element_text("Arial", size = 15),
+        axis.text.x = element_text("Arial", size = 12),
+        axis.text.y = element_text("Arial", size = 12, angle = 45),
+        axis.title.y = element_blank(),
+        legend.position = "none") +
   scale_fill_manual(values = rev(brewer.pal(n = 3, "Set2"))) +
   scale_color_manual(values = rev(brewer.pal(n = 3, "Set2"))) +
   scale_y_discrete(labels = c("Laying date", "Clutch size", "# fledlgings"))
 
+
+
+ 
 ##
 ##
 ##### Sensitivity analysis of lnCVR #####
@@ -118,7 +125,7 @@ summary(model_var_lnVR)
 
 ## 
 ## plot for lnVR
-orchard_plot_PCL(object = model_var_lnVR, 
+vr_plot <- orchard_plot_PCL(object = model_var_lnVR, 
                  mod = " ", 
                  est_point_size = 5,
                  alpha = 0.5,
@@ -126,10 +133,21 @@ orchard_plot_PCL(object = model_var_lnVR,
                  xlab = "log Total Variation Ratio (lnVR)",
                  ylab = "Intercept",
                  transfm = "none") +
+  theme(axis.title = element_text("Arial", size = 15),
+        axis.text.x = element_text("Arial", size = 12),
+        axis.text.y = element_text("Arial", size = 12, angle = 45),
+        axis.title.y = element_blank(),
+        legend.position = "none") +
   scale_fill_manual(values = rev(brewer.pal(n = 3, "Set2"))) +
   scale_color_manual(values = rev(brewer.pal(n = 3, "Set2"))) +
   scale_y_discrete(labels = c("Laying date", "Clutch size", "# fledlgings"))
 
+ggsave(filename = "./plots/Figure S4c.jpeg", 
+       plot = vr_plot, 
+       device = "jpeg", 
+       height = 75, 
+       width = 150, 
+       units = "mm")
 
 ##
 ## Arm-based model ln lnSD
