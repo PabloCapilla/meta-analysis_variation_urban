@@ -253,7 +253,7 @@ het_effect <- ggplot(data = df %>%
                            "heterogeneity on lnCVR (± 95% CI)")))
 
 # saving plot
-ggsave(filename = "./plots/Figure 4b.jpeg", 
+ggsave(filename = "./plots/Figure 4c.jpeg", 
        plot = het_effect, 
        device = "jpeg", 
        width = 80, 
