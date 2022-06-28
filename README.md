@@ -20,7 +20,6 @@ All R code is available in [`data`](https://github.com/PabloCapilla/meta-analysi
 
 [`data`](https://github.com/PabloCapilla/meta-analysis_variation_urban/tree/main/data): contains two files and one sub-folders: 
 * [`META-ANALYSIS - URBAN_RURAL VARIATION - DATA BASE.xlsx`](https://github.com/PabloCapilla/meta-analysis_variation_urban/tree/main/data): initial dataset with effect sizes collected from the literature.
-* [`README - META-ANALYSIS - URBAN_RURAL VARIATION - DATA BASE.xlsx.txt`](https://github.com/PabloCapilla/meta-analysis_variation_urban/tree/main/data): metadata for `META-ANALYSIS - URBAN_RURAL VARIATION - DATA BASE.xlsx`
 * [`META-ANALYSIS - URBAN_RURAL VARIATION - DATA BASE - ReExtracted.xlsx`](https://github.com/PabloCapilla/meta-analysis_variation_urban/tree/main/data): effect sizes from 10 studies, randomly chosen ([`List of study IDs data extracted from.csv`](https://github.com/PabloCapilla/meta-analysis_variation_urban/tree/main/data/) contains the list of study IDs randomly generated), re-extracted to validate literature data extraction.
 * [`processed_RDS_data_files`](https://github.com/PabloCapilla/meta-analysis_variation_urban/tree/main/data/processed_RDS_data_files): processed dataset ready for analysis. Scripts in the folder [`scripts/1_data_processing`](https://github.com/PabloCapilla/meta-analysis_variation_urban/tree/main/scripts/1_data_processing) generate these data tables.
 
@@ -33,8 +32,13 @@ All R code is available in [`data`](https://github.com/PabloCapilla/meta-analysi
 
 [`models`](https://github.com/PabloCapilla/meta-analysis_variation_urban/tree/main/models/): contains three subfolders with models included in [`Table S2`](https://github.com/PabloCapilla/meta-analysis_variation_urban/tree/main/models/Table_S2) and [`Table S4`](https://github.com/PabloCapilla/meta-analysis_variation_urban/tree/main/models/Table_S4) of the manuscript. A third sub-folder, [`land_cover_models`](https://github.com/PabloCapilla/meta-analysis_variation_urban/tree/main/models/land_cover_models) contains all models whose results are presented in Figure 4 (i.e., meta-regressions including land cover variables as moderators).
 
-[`literature_search`](https://github.com/PabloCapilla/meta-analysis_variation_urban/tree/main/literature_search): contains the references found by our searches [`List of studies screened.xlsx`](https://github.com/PabloCapilla/meta-analysis_variation_urban/tree/main/literature_search), which we performed in Web of Science and Scopus, after removing duplicates. The list contains details of which studies were inspected and which studies contained data that we extracted. This folder, file [`Benchmark papers.xlsx`](https://github.com/PabloCapilla/meta-analysis_variation_urban/tree/main/literature_search), also contains the assessment of literature search comprehensiveness.
+[`literature_search`](https://github.com/PabloCapilla/meta-analysis_variation_urban/tree/main/literature_search): contains the references found by our searches [`List of studies screened.xlsx`](https://github.com/PabloCapilla/meta-analysis_variation_urban/tree/main/literature_search), which we performed in Web of Science and Scopus, after removing duplicates. The list contains details of which studies were inspected and which studies contained data that we extracted. This folder, file [`Benchmark papers.xlsx`](https://github.com/PabloCapilla/meta-analysis_variation_urban/tree/main/literature_search), also contains the assessment of literature search comprehensiveness. Re-extracted effect sizes to check data extration can be found in [`Data_validatoin_reextraction_effect_sizes.xlsx`](https://github.com/PabloCapilla/meta-analysis_variation_urban/tree/master/literature_search).
 
 ## Notes
 
 See details of the licence of this repository in [`LICENSE`](https://github.com/PabloCapilla/meta-analysis_variation_urban/blob/main/LICENSE).
+
+## R packages included in this project
+```{r}
+grateful::cite_packages(output = "table")
+```
