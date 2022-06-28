@@ -39,6 +39,6 @@ All R code is available in [`data`](https://github.com/PabloCapilla/meta-analysi
 See details of the licence of this repository in [`LICENSE`](https://github.com/PabloCapilla/meta-analysis_variation_urban/blob/main/LICENSE).
 
 ## R packages included in this project
-```{r}
+```{r, include = FALSE}
 grateful::cite_packages(output = "table")
 ```
