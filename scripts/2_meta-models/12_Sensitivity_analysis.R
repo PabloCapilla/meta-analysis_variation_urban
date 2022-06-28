@@ -6,7 +6,7 @@
 #' Capilla-Lasheras et al. 
 #' Preprint: https://doi.org/10.1101/2021.09.24.461498
 #' 
-#' Latest update: 2022/06/22
+#' Latest update: 2022/06/28
 #' 
 ###
 ###
@@ -94,8 +94,6 @@ orchard_plot_PCL(object = model_mean_SMDH,
   scale_y_discrete(labels = c("Laying date", "Clutch size", "# fledlgings"))
 
 
-
- 
 ##
 ##
 ##### Sensitivity analysis of lnCVR #####
@@ -125,7 +123,7 @@ summary(model_var_lnVR)
 
 ## 
 ## plot for lnVR
-vr_plot <- orchard_plot_PCL(object = model_var_lnVR, 
+orchard_plot_PCL(object = model_var_lnVR, 
                  mod = " ", 
                  est_point_size = 5,
                  alpha = 0.5,
@@ -142,12 +140,7 @@ vr_plot <- orchard_plot_PCL(object = model_var_lnVR,
   scale_color_manual(values = rev(brewer.pal(n = 3, "Set2"))) +
   scale_y_discrete(labels = c("Laying date", "Clutch size", "# fledlgings"))
 
-ggsave(filename = "./plots/Figure S4c.jpeg", 
-       plot = vr_plot, 
-       device = "jpeg", 
-       height = 75, 
-       width = 150, 
-       units = "mm")
+
 
 ##
 ## Arm-based model ln lnSD

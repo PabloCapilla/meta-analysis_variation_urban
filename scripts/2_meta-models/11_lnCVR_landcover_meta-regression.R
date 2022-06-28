@@ -6,7 +6,7 @@
 #' Capilla-Lasheras et al. 
 #' Preprint: https://doi.org/10.1101/2021.09.24.461498
 #' 
-#' Latest update: 2022/06/22
+#' Latest update: 2022/06/28
 #' 
 ###
 ###
@@ -37,6 +37,10 @@ source("./scripts/R_library/FUNCTION_lc_selection.R")
 ##### data #####
 ##
 data <- readRDS("./data/processed_RDS_data_files/metaanalysis_full_data_landcover.RDS") # data including landcover variables
+data$scientific_name <- gsub(x = data$scientific_name, 
+                             pattern = "_", 
+                             replacement = " ")
+data$scientific_name_phylo <- data$scientific_name
 
 # matrix with phylogentic correlations
 phylo_cor <- readRDS("./data/processed_RDS_data_files/phylogenetic_correlations_lancover_model.RDS")

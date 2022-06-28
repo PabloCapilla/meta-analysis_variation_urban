@@ -6,7 +6,7 @@
 #' Capilla-Lasheras et al. 
 #' Preprint: https://doi.org/10.1101/2021.09.24.461498
 #' 
-#' Latest update: 2022/06/21
+#' Latest update: 2022/06/28
 #' 
 ###
 ###
@@ -324,14 +324,7 @@ head(data)
 saveRDS(object = data, file = "./data/processed_RDS_data_files/metaanalysis_full_data.RDS")
 #####
 
-##
-##### List of papers to re-extract effect sizes (15% of dataset) #####
-##
-set.seed(1)
-proportion_re_extracted <- 0.15
-sample(x = unique(data$study_ID), 
-       size = round(length(unique(data$study_ID))*proportion_re_extracted, digits = 0), 
-       replace = F)
+
 
 
 

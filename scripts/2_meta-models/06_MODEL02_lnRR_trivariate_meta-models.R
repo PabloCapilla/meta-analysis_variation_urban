@@ -6,7 +6,7 @@
 #' Capilla-Lasheras et al. 
 #' Preprint: https://doi.org/10.1101/2021.09.24.461498
 #' 
-#' Latest update: 2022/06/22
+#' Latest update: 2022/06/28
 #' 
 ###
 ###
@@ -133,8 +133,7 @@ model1 <- rma.mv(yi = lnRR,
                  R = list(scientific_name_phylo = phylo_cor), #phylogenetic relatedness
                  struct=c("DIAG", "DIAG"), 
                  data=df_lnRR, 
-                 method="ML",
-                 control=list(optimizer="BFGS", iter.max=1000, rel.tol=1e-8)) #improve convergence
+                 method="ML") 
 
 #saveRDS(object = model1, "./models/Table_S2/MODEL2.1_lnRR.RDS")
 #model1 <- readRDS("./models/Table_S2/MODEL2.1_lnRR.RDS")
