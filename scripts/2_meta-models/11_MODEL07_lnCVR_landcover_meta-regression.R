@@ -6,7 +6,7 @@
 #' Capilla-Lasheras et al. 
 #' Preprint: https://doi.org/10.1101/2021.09.24.461498
 #' 
-#' Latest update: 2022/06/28
+#' Latest update: 2022/07/07
 #' 
 ###
 ###
@@ -26,7 +26,7 @@ rm(list=ls())
 ##
 ##### libraries and help functions #####
 ##
-pacman::p_load(dplyr, tidyr, extrafont, metafor, ggplot2, orchaRd, data.table) 
+pacman::p_load(dplyr, tidyr, extrafont, metafor, ggplot2, orchaRd, data.table, sf) 
 loadfonts()
 source("./scripts/R_library/functions.R")
 source("./scripts/R_library/orchard_plot_PCL.R")
@@ -69,6 +69,48 @@ df_samplesize %>%
             se_urban = sd(urban_urban_value)/sqrt(n()),
             mean_nonurban = mean(nonurban_urban_value),
             se_nonurban = sd(nonurban_urban_value)/sqrt(n()),)
+
+##
+##
+##### Calculating distance between urban and non-urban populations #####
+##
+##
+
+## dataframe to calculate distances
+distance_df <- data %>% 
+  group_by(study_ID) %>% 
+  filter(row_number() == 1) %>% 
+  dplyr::select(urban_lat, urban_lon, rural_lat, rural_lon) %>% 
+  separate_rows(sep = "_", urban_lat, urban_lon, rural_lat, rural_lon) %>% 
+  transmute(study_ID,
+            urban_lat.dir = as.numeric(recode(substr(urban_lat,nchar(urban_lat),nchar(urban_lat)), "N"=1, "S"=(-1))), 
+            urban_lon.dir = as.numeric(recode(substr(urban_lon,nchar(urban_lon),nchar(urban_lon)), "E"=1, "W"=(-1))),
+            urban_lat = as.numeric(substr(urban_lat,1,nchar(urban_lat)-1)), 
+            urban_lon = as.numeric(substr(urban_lon,1,nchar(urban_lon)-1)),
+            rural_lat.dir = as.numeric(recode(substr(rural_lat,nchar(rural_lat),nchar(rural_lat)), "N"=1, "S"=(-1))), 
+            rural_lon.dir = as.numeric(recode(substr(rural_lon,nchar(rural_lon),nchar(rural_lon)), "E"=1, "W"=(-1))),
+            rural_lat = as.numeric(substr(rural_lat,1,nchar(rural_lat)-1)), 
+            rural_lon = as.numeric(substr(rural_lon,1,nchar(rural_lon)-1))) %>% 
+  mutate(urban_lat = urban_lat*urban_lat.dir, 
+         urban_lon = urban_lon*urban_lon.dir,
+         rural_lat = rural_lat*rural_lat.dir, 
+         rural_lon = rural_lon*rural_lon.dir) %>% 
+  dplyr::select(-urban_lat.dir, -urban_lon.dir, -rural_lat.dir, -rural_lon.dir) %>% 
+  ungroup()
+
+## calculate distances
+distance_df$distance <- NA
+
+for(i in 1:nrow(distance_df)){
+  distance_df$distance[i] <- raster::pointDistance(p1 = c(distance_df$urban_lon[i], distance_df$urban_lat[i]), 
+                                                   p2 = c(distance_df$rural_lon[i], distance_df$rural_lat[i]), 
+                                                   lonlat = T)
+}
+
+distance_df <- distance_df %>% 
+  group_by(study_ID) %>% 
+  summarise(distance = mean(distance))
+summary(distance_df$distance)
 
 
 ##
