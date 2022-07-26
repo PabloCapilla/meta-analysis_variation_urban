@@ -2,11 +2,11 @@
 ###
 #' 
 #' Script for:
-#' A global meta-analysis reveals higher phenological variation in urban birds than in their non-urban neighbours
+#' A global meta-analysis reveals higher variation in breeding phenology in urban birds than in their non-urban neighbours
 #' Capilla-Lasheras et al. 
 #' Preprint: https://doi.org/10.1101/2021.09.24.461498
 #' 
-#' Latest update: 2022/06/28
+#' Latest update: 2022/07/26
 #' 
 ###
 ###
@@ -26,7 +26,7 @@ rm(list=ls())
 ##
 ##### libraries and help functions #####
 ##
-pacman::p_load(dplyr, tidyr, extrafont, metafor, ggplot2, orchaRd, DT) 
+pacman::p_load(dplyr, tidyr, extrafont, metafor, ggplot2, orchaRd, DT, RColorBrewer) 
 loadfonts()
 source("./scripts/R_library/functions.R")
 source("./scripts/R_library/orchard_plot_PCL.R")
@@ -414,7 +414,7 @@ base_plot <- orchard_plot_PCL_noApples(object = model1,
                                        est_point_size = 5,
                                        alpha = 0.5,
                                        cb = FALSE,
-                                       xlab = "ln Coefficient of Variation Ratio (lnCVR)",
+                                       xlab = "log Coefficient of Variation Ratio (lnCVR)",
                                        ylab = "Intercept",
                                        transfm = "none") +
   scale_fill_manual(values = rev(brewer.pal(n = 3, "Set2"))) +
