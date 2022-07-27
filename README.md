@@ -6,7 +6,7 @@ This repository contains materials used for a project investigating changes in p
 
 ---
 
-Pablo Capilla-Lasheras, Megan J. Thompson, Alfredo Sánchez-Tójar, Yacob Haddou, Claire J. Branston, Denis Réale, Anne Charmantier, Davide M. Dominoni. **A global meta-analysis reveals higher variation in breeding phenology in urban birds than in their non-urban neighbours**. *bioRxiv*. DOI: 10.1101/2021.09.24.461498
+Pablo Capilla-Lasheras, Megan J. Thompson, Alfredo Sánchez-Tójar, Yacob Haddou, Claire J. Branston, Denis Réale, Anne Charmantier, Davide M. Dominoni. **A global meta-analysis reveals higher variation in breeding phenology in urban birds than in their non-urban neighbours**. *bioRxiv*. DOI: 10.1101/2021.09.24.461498v3
 
 ---
 
@@ -14,7 +14,7 @@ For any further information, please contact: [Pablo Capilla-Lasheras](https://sc
 
 ## Code:
 
-All R code is available in [`data`](https://github.com/PabloCapilla/meta-analysis_variation_urban/tree/main/scripts). Scripts are numbered in order of use from 1 to 10. Scripts titles should be self-explanatory, but each script contains a description section with further information. The paths provided to import datasets into R assume your location is the main folder of the repository (i.e., the general folder `meta-analysis_variation_urban`). The R version used for this project was 4.0.3.
+All R code is available in [`scripts`](https://github.com/PabloCapilla/meta-analysis_variation_urban/tree/main/scripts). Scripts are numbered in order of use from 1 to 10. Scripts titles should be self-explanatory, but each script contains a description section with further information. The paths provided to import datasets into R assume your location is the main folder of the repository (i.e., the general folder `meta-analysis_variation_urban`). The R version used for this project was 4.2.0.
 
 ## Folders:
 
