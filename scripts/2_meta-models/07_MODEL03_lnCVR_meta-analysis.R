@@ -6,7 +6,7 @@
 #' Capilla-Lasheras et al. 
 #' Preprint: https://doi.org/10.1101/2021.09.24.461498
 #' 
-#' Latest update: 2022/07/26
+#' Latest update: 2022/09/06
 #' 
 ###
 ###
@@ -77,6 +77,7 @@ lnCVR_plot <- orchard_plot_PCL(object = model_lnCVR,
                               mod = "Intercept", 
                               est_point_size = 5,
                               alpha = 0.5,
+                              pred_int = T,
                               cb = FALSE,
                               xlab = "log Coefficient of Variation Ratio", 
                               ylab = "Intercept",
